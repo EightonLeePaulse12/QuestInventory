@@ -5,23 +5,32 @@ namespace QuestInventory
 {
     class Program
     {
+        // Public variables for use in entire class
         public static bool running = true;
-        private static List<string> inventory = new List<string> { "Sword of Destiny ⚔️", "Shield of Light 🛡️", "Healing Potion 🍷", "Ring of Invisibility 💍" };
-        static void Main(string[] args)
+        private static readonly List<string> inventory =  [ "Sword of Destiny", "Shield of Light", "Healing Potion", "Ring of Invisibility" ];
+        // Main method to start the program
+        static void Main()
         {
-            
             int option;
 
             while (running)
             {
-                showStarterMenu();
+                ShowStarterMenu();
                 option = int.Parse(Console.ReadLine());
+                try
+                {
+                    HandleInventoryOperations(option);
+                } catch(FormatException e)
+                {
+                      Console.WriteLine("Invalid input. Please enter a number.");
+                }
 
-                handleInventoryOperations(option);
+                
             }
         }
 
-        private static void showStarterMenu()
+        // Show starter menu with inventory options
+        private static void ShowStarterMenu()
         {
             Console.WriteLine("Welcome to the Quest Inventory!");
             Console.WriteLine("Your current inventory:");
@@ -39,43 +48,49 @@ namespace QuestInventory
             Console.WriteLine("5. Clear console");
         }
 
-        private static void handleInventoryOperations(int option)
+        // Handle all the inventory operations based on user input
+        private static void HandleInventoryOperations(int option)
         {
-            switch (option)
-            {
-                case 1:
-                    Console.WriteLine("Please enter the name of the item you want to pick up: ");
-                    string itemToAdd = Console.ReadLine();
-                    pickUpAnItem(itemToAdd);
-                    Console.WriteLine("Picked up " + itemToAdd + "!");
-                    break;
-                case 2:
-                    Console.WriteLine("Your current inventory:");
-                    Console.WriteLine("==================================");
-                    checkInventory();
-                    break;
-                case 3:
-                    Console.WriteLine("Please enter the name of the item you want to use: ");
-                    useItem();
-                    break;
+                switch (option)
+                {
+                    case 1:
+                        Console.WriteLine("Please enter the name of the item you want to pick up: ");
+                        string itemToAdd = Console.ReadLine();
+                        PickUpAnItem(itemToAdd);
+                        Console.WriteLine("Picked up " + itemToAdd + "!");
+                        break;
+                    case 2:
+                        Console.WriteLine("Your current inventory:");
+                        Console.WriteLine("==================================");
+                        CheckInventory();
+                        break;
+                    case 3:
+                        Console.WriteLine("Please enter the name of the item you want to use: ");
+                        UseItem();
+                        break;
 
-                case 4:
-                    rest();
-                    break;
-                case 5:
-                    clearConsole();
-                    break;
+                    case 4:
+                        Rest();
+                        break;
+                    case 5:
+                        ClearConsole();
+                        break;
+                    default:
+                        Console.WriteLine("Invalid option. Please try again.");
+                        break;
 
             }
         }
 
-        private static void pickUpAnItem(string item)
+        // Method to pick up an item and add it to the inventory
+        private static void PickUpAnItem(string item)
         {  
             inventory.Add(item);
             Console.WriteLine(item + " has been added to your inventory!");
         }
 
-        private static void checkInventory()
+        // Method to check the current inventory
+        private static void CheckInventory()
         {
             
             foreach (string item in inventory)
@@ -83,8 +98,9 @@ namespace QuestInventory
                 Console.WriteLine($"- {item}");
             }
         }
-        
-        private static void useItem()
+
+        // Method to use an item from the inventory
+        private static void UseItem()
         {
             string itemToUse = Console.ReadLine();
             if(inventory.Contains(itemToUse))
@@ -98,15 +114,15 @@ namespace QuestInventory
             Console.WriteLine($"You have used {itemToUse}!");
         }
 
-        
-
-        private static void clearConsole()
+        // Method to clear the console and show the starter menu again
+        private static void ClearConsole()
         {
             Console.Clear();
-            showStarterMenu();
+            ShowStarterMenu();
         }
 
-        private static void rest()
+        // Method to rest and exit the game
+        private static void Rest()
         {
             Console.WriteLine("You have rested and regained your strength!");
             Console.WriteLine("Exiting the game...");
